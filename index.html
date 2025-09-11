@@ -1,135 +1,119 @@
-
-
- <!DOCTYPE html>
-
 <html lang="en">
-
-<head>
-
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Arbin Anand | Portfolio</title>
-
-  <link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-
-  <!-- Header -->
-
-  <header>
-
-    <h1 class="typing"></h1>
-
-    <p>B.Sc Computer Technology | Frontend Developer</p>
-
-  </header>
-
-  <!-- Navigation -->
-
-  <nav>
-
-    <a href="#about">About</a>
-
-    <a href="#skills">Skills</a>
-
-    <a href="#projects">Projects</a>
-
-    <a href="#contact">Contact</a>
-
-    <button id="toggleBtn">🌙 Dark Mode</button>
-
-  </nav>
-
-  <!-- About Section -->
-
-  <section id="about">
-
-    <h2>About Me</h2>
-
-    <p>
-
-      I am a Computer Technology student passionate about exploring
-
-      cloud computing, IoT, and cyber defense.
-
-    </p>
-
-  </section>
-
-  <!-- Skills Section -->
-
-  <section id="skills">
-
-    <h2>Skills</h2>
-
-    <ul>
-
-      <li>HTML, CSS, JavaScript</li>
-
-      <li>Python & Data Visualization</li>
-
-      <li>SQL & Database Management</li>
-
-      <li>Java Programming</li>
-
-    </ul>
-
-  </section>
-
-  <!-- Projects Section -->
-
-  <section id="projects">
-
-    <h2>Projects</h2>
-
-    <div class="project">
-
-      <h3>Personal Portfolio Website</h3>
-
-      <p>A responsive portfolio website built with HTML, CSS, and JavaScript.</p>
-
-    </div>
-
-    <div class="project">
-
-      <h3>Data Dashboard</h3>
-
-      <p>Interactive charts using Python and Power BI for sales data analysis.</p>
-
-    </div>
-
-  </section>
-
-  <!-- Contact Section -->
-
-  <section id="contact">
-
-    <h2>Contact</h2>
-
-    <p>Email: arbinanand10@gmail.com</p>
-
-    <p>Phone: +91 8847289419</p>
-
-    <p>Location: Coimbatore, India</p>
-
-  </section>
-
-  <!-- Footer -->
-
-  <footer>
-
-    <p>© 2025 Arbin Anand | Student Digital Portfolio</p>
-
-  </footer>
-
-  <!-- JS -->
-
-  <script src="script.js"></script>
-
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>p5.js + Honeycomb Magnifier</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+    <!-- p5.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+    <!-- dat.GUI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+  </head>
+  <body>
+    <script>
+      let params = {
+        hexSize: 40,
+        magnifier: {
+          radius: 100,
+          zoom: 1.5
+        }
+      };
+
+      let cols, rows;
+      let palette = [];
+      let colorsGrid = [];
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        noStroke();
+        palette = [
+          color(255, 102, 102),   // Light red
+          color(255, 204, 0),     // Yellow
+          color(102, 204, 255),   // Light blue
+          color(51, 153, 102),    // Green
+          color(204, 102, 153),   // Pink
+          color(153, 51, 153),    // Purple
+          color(255, 153, 51)     // Orange
+        ];
+        setupGUI();
+        calculateGrid();
+        generateColors();
+      }
+
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight);
+        calculateGrid();
+        generateColors();
+      }
+
+      function setupGUI() {
+        const gui = new dat.GUI();
+
+        const hexFolder = gui.addFolder('Hexagon Settings');
+        hexFolder.add(params, 'hexSize', 10, 100).step(1).name('Hexagon Size').onChange(() => {
+          calculateGrid();
+          generateColors();
+        });
+
+        const magnifierFolder = gui.addFolder('Magnifier Settings');
+        magnifierFolder.add(params.magnifier, 'radius', 50, 300).step(1).name('Magnifier Radius');
+        magnifierFolder.add(params.magnifier, 'zoom', 1, 3).step(0.1).name('Zoom Factor');
+
+        hexFolder.open();
+        magnifierFolder.open();
+      }
+
+      function calculateGrid() {
+        cols = ceil(width / (params.hexSize * 1.5)) + 1;
+        rows = ceil(height / (params.hexSize * sqrt(3))) + 1;
+      }
+
+      function generateColors() {
+        colorsGrid = [];
+        for (let i = 0; i < cols; i++) {
+          colorsGrid[i] = [];
+          for (let j = 0; j < rows; j++) {
+            colorsGrid[i][j] = random(palette);
+          }
+        }
+      }
+
+      function draw() {
+        background(255);
+        for (let i = 0; i < cols; i++) {
+          for (let j = 0; j < rows; j++) {
+            let x = i * params.hexSize * 1.5;
+            let y = j * params.hexSize * sqrt(3);
+            if (i % 2 === 1) y += params.hexSize * sqrt(3) / 2;
+
+            let d = dist(mouseX, mouseY, x, y);
+            let scaleFactor = 1;
+            if (d < params.magnifier.radius) {
+              scaleFactor = map(d, 0, params.magnifier.radius, params.magnifier.zoom, 1);
+            }
+
+            fill(colorsGrid[i][j]);
+            drawHexagon(x, y, params.hexSize * scaleFactor);
+          }
+        }
+      }
+
+      function drawHexagon(x, y, s) {
+        beginShape();
+        for (let a = 0; a < TWO_PI; a += PI / 3) {
+          let vx = x + cos(a) * s;
+          let vy = y + sin(a) * s;
+          vertex(vx, vy);
+        }
+        endShape(CLOSE);
+      }
+    </script>
+  </body>
 </html>
