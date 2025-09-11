@@ -1,0 +1,189 @@
+/* General Styles */
+
+body {
+
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  background: #f4f4f9;
+
+  color: #333;
+
+  transition: background 0.3s, color 0.3s;
+
+}
+
+header {
+
+  background: #4a90e2;
+
+  color: white;
+
+  padding: 20px 0;
+
+  text-align: center;
+
+}
+
+nav {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 20px;
+
+  background: #333;
+
+  padding: 10px 0;
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 10;
+
+}
+
+nav a {
+
+  color: white;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+}
+
+nav a:hover {
+
+  color: #4a90e2;
+
+}
+
+nav button {
+
+  cursor: pointer;
+
+  background: #4a90e2;
+
+  color: white;
+
+  border: none;
+
+  padding: 8px 15px;
+
+  border-radius: 5px;
+
+  font-size: 14px;
+
+}
+
+/* Sections */
+
+section {
+
+  max-width: 1000px;
+
+  margin: 30px auto;
+
+  padding: 20px;
+
+  background: white;
+
+  border-radius: 8px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  transition: background 0.3s, color 0.3s;
+
+}
+
+h2 {
+
+  color: #4a90e2;
+
+}
+
+.project {
+
+  margin-bottom: 15px;
+
+  padding: 15px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 6px;
+
+  transition: all 0.3s ease;
+
+}
+
+.project:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+}
+
+footer {
+
+  text-align: center;
+
+  background: #333;
+
+  color: white;
+
+  padding: 15px 0;
+
+  margin-top: 30px;
+
+}
+
+/* Dark Mode */
+
+.dark-mode {
+
+  background: #1e1e1e;
+
+  color: #f4f4f9;
+
+}
+
+.dark-mode section {
+
+  background: #2c2c2c;
+
+}
+
+.dark-mode nav {
+
+  background: #111;
+
+}
+
+.dark-mode .project {
+
+  border: 1px solid #444;
+
+}
+
+/* Typing Cursor */
+
+.typing::after {
+
+  content: "|";
+
+  animation: blink 0.7s infinite;
+
+  margin-left: 3px;
+
+}
+
+@keyframes blink {
+
+  50% { opacity: 0; }
+
+}
